@@ -1,3 +1,4 @@
+use axum::{http::StatusCode, response::IntoResponse, Json};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -15,4 +16,20 @@ pub struct CreateTodo {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct NewTodo {
     pub id: i32,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct Entity {
+    pub id: i64,
+}
+
+impl Entity {
+    pub fn new(id: i64) -> Self {
+        Entity { id }
+    }
+}
+impl IntoResponse for Entity {
+    fn into_response(self) -> axum::response::Response {
+        (StatusCode::OK, Json(self)).into_response()
+    }
 }

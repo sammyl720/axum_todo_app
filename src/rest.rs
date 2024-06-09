@@ -1,6 +1,6 @@
 use axum::{
     response::Json,
-    routing::{get, post},
+    routing::{get, post, put},
     Extension, Router,
 };
 
@@ -8,8 +8,8 @@ use sqlx::SqlitePool;
 
 use crate::{
     app_err::AppError,
-    database::{create_todo, get_all_todos, init_db},
-    todos::{CreateTodo, NewTodo, Todo},
+    database::{create_todo, get_all_todos, init_db, update_todo},
+    todos::{CreateTodo, Entity, NewTodo, Todo},
 };
 
 #[derive(Clone)]
@@ -25,6 +25,7 @@ pub async fn init_router() -> Result<Router, AppError> {
     Ok(Router::new()
         .route("/", get(get_todos))
         .route("/", post(add_todo))
+        .route("/edit", put(edit_todo))
         .layer(Extension(state)))
 }
 
@@ -44,4 +45,14 @@ async fn add_todo(
     result
         .map(|id| Json(NewTodo { id }))
         .map_err(|err: anyhow::Error| AppError(err))
+}
+
+async fn edit_todo(
+    Extension(state): Extension<AppState>,
+    todo: Json<Todo>,
+) -> Result<Entity, AppError> {
+    update_todo(&state.db, todo.0)
+        .await
+        .map(Entity::new)
+        .map_err(|err| AppError(err))
 }

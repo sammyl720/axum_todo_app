@@ -34,5 +34,16 @@ ORDER BY id
     )
     .fetch_all(conn)
     .await
-    .with_context(|| "Could not connect to database")
+    .with_context(|| "Could not get all todos from database")
+}
+
+pub async fn update_todo(conn: &SqlitePool, todo: Todo) -> Result<i64> {
+    sqlx::query("UPDATE todos SET description=$1, done=$2 WHERE id=$3")
+        .bind(&todo.description)
+        .bind(&todo.done)
+        .bind(&todo.id)
+        .execute(conn)
+        .await
+        .with_context(|| "Could not update todo in database")
+        .map(|_| todo.id)
 }
