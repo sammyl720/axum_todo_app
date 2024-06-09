@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 1rem;
+}
+
+h2 {
+    color: dodgerblue;
+    margin-bottom: .5rem;
+}
+
+.todos {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    box-shadow: 1px 1px 12px -6px rgba(0,0,0,0.2);
+    background-color: rgb(245, 247, 249);
+    border-radius: 4px;
+    gap: 8px;
+
+    .todo-item {
+        color: dodgerblue;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+
+        .todo-description {
+            font-weight: 600;
+        }
+
+        .todo__action-buttons {
+            display: flex;
+            align-self: flex-end;
+            gap: 6px;
+            margin-left: auto;
+        }
+    }
+}
+
+.btn {
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    background-color: rgb(7, 163, 114);
+    border:none;
+    color: whitesmoke;
+    outline: none;
+    cursor: pointer;
+
+    &.btn--danger {
+        background-color: rgb(226, 43, 64);
+    }
+}

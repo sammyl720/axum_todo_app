@@ -18,7 +18,7 @@ pub struct AppState {
     db: SqlitePool,
 }
 
-pub async fn init_router() -> Result<Router, AppError> {
+pub async fn todo_service() -> Result<Router, AppError> {
     let pool = init_db().await?;
 
     let state = AppState { db: pool };

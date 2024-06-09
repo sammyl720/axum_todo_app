@@ -1,5 +1,7 @@
+use axum::Router;
 use dotenv::dotenv;
-use rest::init_router;
+use rest::todo_service;
+use tower_http::services::ServeDir;
 
 mod app_err;
 mod database;
@@ -12,7 +14,9 @@ const HOST: &str = "0.0.0.0:3000";
 async fn main() {
     dotenv().ok();
     // init router app
-    let app = init_router().await.unwrap();
+    let app = Router::new()
+        .nest_service("/", ServeDir::new("public"))
+        .nest_service("/api/todos", todo_service().await.unwrap());
 
     // create tcp listener
     let listener = tokio::net::TcpListener::bind(HOST).await.unwrap();
