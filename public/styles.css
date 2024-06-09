@@ -8,25 +8,77 @@ body {
     margin: 1rem;
 }
 
+:root {
+    --primary-color: rgb(1, 82, 163);
+    --secondary-color: rgb(7, 163, 114);
+    --danger-color: rgb(226, 43, 64);
+    --backdrop-color: rgb(24 33 115 / 55%);
+    --spacing-md: 12px;
+}
+
+.todos__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) calc(var(--spacing-md) + 0.5rem);
+}
+
 h2 {
-    color: dodgerblue;
+    color: var(--primary-color);
     margin-bottom: .5rem;
+}
+
+.create_todo_dialog {
+    width: 100%;
+    padding: var(--spacing-md) calc(var(--spacing-md) + 0.5rem);
+    border:none;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 50px);
+    border-radius: var(--spacing-md);
+
+    &::backdrop {
+        background-color: var(--backdrop-color);
+    }
+
+    form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+
+        label {
+            color: var(--primary-color);
+            flex-grow: 2;
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        input {
+            border: none;
+            outline: none;
+            flex-grow: 2;
+            border-bottom: 1px solid var(--primary-color);
+        }
+    }
 }
 
 .todos {
     display: flex;
     flex-direction: column;
-    padding: 12px;
-    box-shadow: 1px 1px 12px -6px rgba(0,0,0,0.2);
-    background-color: rgb(245, 247, 249);
+    padding: var(--spacing-md);
     border-radius: 4px;
-    gap: 8px;
-
+    gap: 0.5rem;
+    
     .todo-item {
-        color: dodgerblue;
+        box-shadow: 1px 1px 12px -6px rgba(0,0,0,0.2);
+        background-color: rgba(247, 251, 255, 0.813);
+        color: var(--primary-color);
         display: flex;
         gap: 0.5rem;
         align-items: center;
+        padding: 0.5rem;
 
         .todo-description {
             font-weight: 600;
@@ -44,13 +96,20 @@ h2 {
 .btn {
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
-    background-color: rgb(7, 163, 114);
+    background-color: var(--secondary-color);
     border:none;
     color: whitesmoke;
     outline: none;
     cursor: pointer;
 
     &.btn--danger {
-        background-color: rgb(226, 43, 64);
+        background-color: var(--danger-color);
+    }
+
+    &.btn--outline {
+        background: transparent;
+        color: var(--primary-color);
+        font-weight: 500;
+        border: 1px solid currentColor;
     }
 }

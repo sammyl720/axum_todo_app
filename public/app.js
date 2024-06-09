@@ -21,18 +21,39 @@ cancelBtn.addEventListener('click',() => {
     createTodoDialog.close();
 });
 
+createTodoDialog.addEventListener('click', function(event) {
+    const rect = createTodoDialog.getBoundingClientRect();
+    const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
+        rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+    if (!isInDialog) {
+        createTodoDialog.close();
+    }
+});
+
 document.addEventListener("DOMContentLoaded", async() => {
     await populate_todos();
 })
 
 async function populate_todos() {
     const todos = await fetch_todos();
+    if (DocumentTimeline.startViewTransition) 
+    {
+        document.startViewTransition(() => update_todo_list(todos));
+    }
+    else
+    {
+        update_todo_list(todos);
+    }
+        
+    notify('Todo list updated')
+}
+
+function update_todo_list(todos) {
     const todosEl = document.getElementById("todos");
     todosEl.innerHTML = "";
     todos.forEach(todo => {
         todosEl.appendChild(createTodoElement(todo))
     });
-    notify('Todo list updated')
 }
 
 function createTodoElement(todo) {

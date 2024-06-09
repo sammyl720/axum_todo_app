@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Todos</title>
+    <title>Todos List</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
     <div class="todos__header">
-        <h2 class="todos__title">Track todos</h2>
+        <h2 class="todos__title">My Todo List</h2>
         <dialog class="create_todo_dialog">
             <form id="create_todo_form">
                 <label for="description">
                     Description
                     <input autofocus type="text" name="description" id="description" required placeholder="Learn rust...">
                 </label>
-                <button id="cancel_create_btn" type="button" class="btn btn--outline">Cancel</button>
-                <button type="submit" class="btn">Create</button>
+                <div class="create_todo__buttons">
+                    <button id="cancel_create_btn" type="button" class="btn btn--outline">Cancel</button>
+                    <button type="submit" class="btn">Create</button>
+                </div>
             </form>
         </dialog>
         <button id="open_dialog_btn" type="button" class="btn">Add Todo</button>
