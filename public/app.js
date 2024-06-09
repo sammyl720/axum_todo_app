@@ -1,4 +1,25 @@
+const createTodoDialog = document.querySelector('dialog.create_todo_dialog');
+const openDialogBtn = document.getElementById('open_dialog_btn');
+const cancelBtn = document.getElementById('cancel_create_btn');
+const createTodoForm = document.getElementById('create_todo_form');
 
+createTodoForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const todo_description = createTodoForm.description.value;
+    const result = await add_todo(todo_description);
+    populate_todos();
+    notify(`Created todo with id ${result.id}`);
+    createTodoForm.description.value = "";
+    createTodoDialog.close();
+});
+
+openDialogBtn.addEventListener('click', () => {
+    createTodoDialog.showModal();
+});
+
+cancelBtn.addEventListener('click',() => {
+    createTodoDialog.close();
+});
 
 document.addEventListener("DOMContentLoaded", async() => {
     await populate_todos();
@@ -11,6 +32,7 @@ async function populate_todos() {
     todos.forEach(todo => {
         todosEl.appendChild(createTodoElement(todo))
     });
+    notify('Todo list updated')
 }
 
 function createTodoElement(todo) {
@@ -39,6 +61,7 @@ function createDeleteActionButton(todo) {
     deleteBtn.textContent = "Remove"
     deleteBtn.addEventListener('click', async() => {
         await delete_todo(todo.id);
+        notify(`Todo with ${todo.id} was deleted`);
         await populate_todos();
     });
 
@@ -50,11 +73,12 @@ function createToggleCompleteButton(todo) {
     toggleButton.classList.add('btn');
     toggleButton.textContent = todo.done ? 'Reset' : 'Complete';
     toggleButton.addEventListener('click', async() => {
-        console.log(todo, 'todo')
+        const done = !todo.done;
         await update_todo({
             ...todo,
-            done: !todo.done
+            done,
         });
+        notify(`Todo with id ${todo.id} marked as ${done ? '' : 'not'} completed`)
         await populate_todos();
     });
 
@@ -63,17 +87,27 @@ function createToggleCompleteButton(todo) {
 
 const TODO_API = "/api/todos";
 
+async function add_todo(description) {
+    const response = await fetch(TODO_API, {
+        method: 'POST',
+        body: JSON.stringify({ description }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    const result = await response.json();
+    return result; 
+}
 async function delete_todo(todo_id) {
     const result = await fetch(`${TODO_API}/delete/${todo_id}`, {
         method: 'DELETE'
     });
     const response = await result.json();
-    console.log(response);
     return response;
 }
 
 async function update_todo(todo) {
-    console.log(todo)
     const result = await fetch(`${TODO_API}/edit`, {
         method: 'PUT',
         body: JSON.stringify(todo),
@@ -82,7 +116,6 @@ async function update_todo(todo) {
         }
     });
     const response = await result.json();
-    console.log(response);
     return response;
 }
 
@@ -90,4 +123,8 @@ async function fetch_todos() {
     const result = await fetch(TODO_API);
     const todos = await result.json();
     return todos;
+}
+
+function notify(message) {
+    console.log(`${new Date().toUTCString()}: ${message}`)
 }
