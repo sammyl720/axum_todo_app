@@ -17,6 +17,7 @@ async fn main() {
     // create tcp listener
     let listener = tokio::net::TcpListener::bind(HOST).await.unwrap();
 
+    println!("Starting server on {}", HOST);
     // create server with listener and app
     axum::serve(listener, app).await.unwrap();
 }
