@@ -331,19 +331,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
 
 [[package]]
-name = "explore_axum"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "axum",
- "dotenv",
- "serde",
- "sqlx",
- "tokio",
- "tower-http",
-]
-
-[[package]]
 name = "fastrand"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1539,6 +1526,19 @@ name = "tinyvec_macros"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
+
+[[package]]
+name = "todo_app"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "dotenv",
+ "serde",
+ "sqlx",
+ "tokio",
+ "tower-http",
+]
 
 [[package]]
 name = "tokio"

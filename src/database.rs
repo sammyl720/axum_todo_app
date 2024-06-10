@@ -7,9 +7,11 @@ use sqlx::{Pool, Row, Sqlite, SqlitePool};
 use crate::todos::{CreateTodo, Todo};
 
 pub async fn init_db() -> Result<Pool<Sqlite>> {
-    SqlitePool::connect(&env::var("DATABASE_URL")?)
+    let pool = SqlitePool::connect(&env::var("DATABASE_URL")?)
         .await
-        .with_context(|| String::from("Failed to connect to db"))
+        .with_context(|| String::from("Failed to connect to db"))?;
+    sqlx::migrate!("./migrations").run(&pool).await?;
+    return Ok(pool);
 }
 
 pub async fn create_todo(conn: &SqlitePool, new_todo: CreateTodo) -> Result<i32, anyhow::Error> {
@@ -36,13 +38,12 @@ pub async fn get_single_todo(conn: &SqlitePool, todo_id: i64) -> Result<Todo> {
 }
 
 pub async fn get_all_todos(conn: &SqlitePool) -> Result<Vec<Todo>> {
-    sqlx::query_as!(
-        Todo,
+    sqlx::query_as::<_, Todo>(
         r#"
 SELECT id, description, done
 FROM todos
 ORDER BY id
-        "#
+        "#,
     )
     .fetch_all(conn)
     .await
