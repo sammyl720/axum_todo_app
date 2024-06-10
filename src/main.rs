@@ -13,7 +13,7 @@ mod todos;
 #[tokio::main]
 async fn main() {
     dotenv().ok();
-    // init router app
+    // init router application
     let app = Router::new()
         .route("/health_check", get(health_check))
         .nest_service("/", ServeDir::new("public"))
