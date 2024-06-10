@@ -51,7 +51,7 @@ ENV DATABASE_URL=sqlite::memory:
 ENV PORT=8080
 
 # Expose the port the app runs on
-EXPOSE 8080
+EXPOSE ${PORT}
 
 # Run the application as the appuser
 USER appuser
